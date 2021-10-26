@@ -1,14 +1,16 @@
 <launch>
+    <arg name="vehicle_name" default="bluerov" />
+    <include file="$(find bluerov_sim)/launch/gazebo_base.launch" />
 
-    <include file="$(find bluerov_sim)/launch/gazebo_base.launch"/>
+    <group ns="$(arg vehicle_name)">
+        <include file="$(find bluerov_sim)/launch/spawn_vehicle.launch">
+            <arg name="z" value="-0.2" />
+        </include>
 
-    <include file="$(find bluerov_sim)/launch/spawn_vehicle.launch">
-        <arg name="z" value="-0.2"/>
-    </include>
+        <node name="mixer" pkg="bluerov_sim" type="mixer.py" output="screen" />
 
-    <node name="mixer" pkg="bluerov_sim" type="mixer.py" output="screen" />
+        <node name="depth_setpoints" pkg="depth_controller" type="depth_setpoint.py" output="screen" />
 
-    <node name="depth_setpoints" pkg="depth_controller" type="depth_setpoint.py" output="screen" />
-    
-      <!-- Add your own nodes here -->
+        <!-- Add your own nodes here -->
+    </group>
 </launch>
